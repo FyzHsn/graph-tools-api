@@ -1,7 +1,7 @@
 import numpy as np
 import re
 
-from utils import preprocess
+from centrality_metrics.utils import preprocess
 
 
 class Text2Graph:
