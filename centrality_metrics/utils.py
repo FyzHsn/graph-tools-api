@@ -27,6 +27,27 @@ STOPWORDS = {"i", "me", "us", "you", "them", "he", "she", "him", "her",
              "&quot", "&gt", "&lt", }
 
 
+def filter_pos(text):
+    """Parts Of Speech Filter
+
+    Remove words that aren't nouns or adjectives.
+
+    :param text: text to be processed
+    :type text: str
+    :return: clean_text
+    :rtype: str
+    """
+
+    text_pos = nltk.pos_tag(text.split())
+    clean_text = ""
+
+    for (word, tag) in text_pos:
+        if ("NN" in tag) or ("ADJ" in tag) or ("JJ" in tag):
+            clean_text += word + " "
+
+    return clean_text
+
+
 def preprocess(text, stop_filter=True, pos_filter=True):
     """Text preprocessor
 
@@ -50,17 +71,11 @@ def preprocess(text, stop_filter=True, pos_filter=True):
     stemmer = PorterStemmer()
     cleaned_sentence_list = []
     for sentence in sentence_list:
-        clean_text = ""
-        text_pos = nltk.pos_tag(sentence.split())
-        for (word, tag) in text_pos:
-            if pos_filter:
-                if ("NN" in tag) or ("ADJ" in tag) or ("JJ" in tag):
-                    clean_text += word + " "
-            else:
-                clean_text += word
+        if pos_filter:
+            sentence = filter_pos(sentence)
 
         if stop_filter:
-            sentence = " ".join([word for word in clean_text.split() if
+            sentence = " ".join([word for word in sentence.split() if
                                  word not in STOPWORDS])
 
         sentence = " ".join([stemmer.stem(word) for word in
@@ -77,5 +92,7 @@ if __name__ == "__main__":
            "studies of the origin and evolution of the universe, from the " \
            "Big Bang to today and on into the future. It is the scientific " \
            "study of the origin, evolution, and eventual fate of the " \
-           "universe."
-    print(preprocess(text))
+           "universe. Absolutely. Running. Big apple."
+    print(preprocess(text, False, True))
+
+    print(filter_pos("") == "")
