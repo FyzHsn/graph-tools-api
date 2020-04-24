@@ -103,20 +103,6 @@ class Text2Graph:
                       key=lambda x: x[1],
                       reverse=True)
 
-    def word_count(self):
-        word_count = {}
-        for sentence in re.split("[?.]", self.text):
-            for word in sentence.split():
-
-                if word in word_count.keys():
-                    word_count[word] += 1
-                else:
-                    word_count[word] = 1
-
-        return sorted([(w, np.round(s, 2)) for (w, s) in word_count.items()],
-                      key=lambda x: x[1],
-                      reverse=True)
-
     def normalized_degree_centrality(self):
         """Compute normalized degree centrality
 
