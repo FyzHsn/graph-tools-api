@@ -1,3 +1,5 @@
+import itertools
+
 from centrality_metrics.utils import filter_pos, preprocess
 
 from centrality_metrics.tests.data import TEST_TEXT
@@ -5,18 +7,18 @@ from centrality_metrics.tests.data import TEST_TEXT
 
 def test_filter_pos():
     assert filter_pos("I am running fast towards a library") == "library"
-    assert filter_pos("") == ""
 
 
 def test_empty_strings():
-    text = ""
-    preprocessing_arguments = zip([True, False], [True, False])
+    preprocessing_args = itertools.product([True, False], repeat=2)
 
-    for stop_filter, pos_filter in preprocessing_arguments:
-        preprocessed_text = preprocess(text,
+    for stop_filter, pos_filter in preprocessing_args:
+        preprocessed_text = preprocess(text="",
                                        stop_filter=stop_filter,
                                        pos_filter=pos_filter)
         assert len(preprocessed_text) == 0
+
+    assert filter_pos("") == ""
 
 
 def test_preprocess_with_stopword_filtered():
