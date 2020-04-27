@@ -84,15 +84,3 @@ def preprocess(text, stop_filter=True, pos_filter=True):
             cleaned_sentence_list.append(sentence)
 
     return cleaned_sentence_list
-
-
-if __name__ == "__main__":
-    text = "Cosmology (from the Greek κόσμος, kosmos 'world' and -λογία, " \
-           "-logia 'study of') is a branch of astronomy concerned with the " \
-           "studies of the origin and evolution of the universe, from the " \
-           "Big Bang to today and on into the future. It is the scientific " \
-           "study of the origin, evolution, and eventual fate of the " \
-           "universe. Absolutely. Running. Big apple."
-    print(preprocess(text, False, True))
-
-    print(filter_pos("") == "")
