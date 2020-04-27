@@ -45,7 +45,7 @@ def filter_pos(text):
         if ("NN" in tag) or ("ADJ" in tag) or ("JJ" in tag):
             clean_text += word + " "
 
-    return clean_text
+    return clean_text.strip()
 
 
 def preprocess(text, stop_filter=True, pos_filter=True):

@@ -8,14 +8,21 @@ def test_filter_pos():
     assert filter_pos("") == ""
 
 
+def test_empty_strings():
+    text = ""
+    preprocessing_arguments = zip([True, False], [True, False])
+
+    for stop_filter, pos_filter in preprocessing_arguments:
+        preprocessed_text = preprocess(text,
+                                       stop_filter=stop_filter,
+                                       pos_filter=pos_filter)
+        assert len(preprocessed_text) == 0
+
+
 def test_preprocess_with_stopword_filtered():
     preprocessed_text = preprocess(TEST_TEXT, stop_filter=True,
                                    pos_filter=False)
     assert len(preprocessed_text) == 4
-
-    text = ""
-    preprocessed_text = preprocess(text, stop_filter=True, pos_filter=False)
-    assert len(preprocessed_text) == 0
 
 
 def test_preprocess_with_pos_filtered():
@@ -23,26 +30,14 @@ def test_preprocess_with_pos_filtered():
                                    pos_filter=True)
     assert len(preprocessed_text) == 3
 
-    text = ""
-    preprocessed_text = preprocess(text, stop_filter=False, pos_filter=True)
-    assert len(preprocessed_text) == 0
-
 
 def test_preprocess_with_pos_stopword_filtered():
     preprocessed_text = preprocess(TEST_TEXT, stop_filter=True,
                                    pos_filter=True)
     assert len(preprocessed_text) == 3
 
-    text = ""
-    preprocessed_text = preprocess(text, stop_filter=True, pos_filter=True)
-    assert len(preprocessed_text) == 0
-
 
 def test_preprocess_with_no_filter():
     preprocessed_text = \
         preprocess(TEST_TEXT, stop_filter=False, pos_filter=False)
     assert len(preprocessed_text) == 5
-
-    text = ""
-    preprocessed_text = preprocess(text, stop_filter=False, pos_filter=False)
-    assert len(preprocessed_text) == 0
