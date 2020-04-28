@@ -15,7 +15,7 @@ class Text2Graph:
         self.text = text
         self.graph = {}
 
-    def preprocess(self, stop_filter=True, pos_filter=True):
+    def preprocess_text(self, stop_filter=True, pos_filter=True):
         """Preprocess document text
 
         This method can filter out basic stopwords listed in the utils file
@@ -30,6 +30,7 @@ class Text2Graph:
         self.text = ". ".join(preprocess(self.text,
                                          stop_filter=stop_filter,
                                          pos_filter=pos_filter))
+        self.text += "."
 
     @staticmethod
     def weighted_graph(graph, text, window=2):

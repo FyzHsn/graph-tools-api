@@ -5,7 +5,7 @@ from centrality_metrics.tests.data import TEST_DOC
 
 
 @pytest.fixture
-def document_graph():
+def document():
     """Create and initialize a text document and its graph.
 
     :return: text document
@@ -16,6 +16,19 @@ def document_graph():
     return doc_graph
 
 
+def test_doc_graph_init(document):
+    assert document.graph == {}
+
+
+def test_preprocess(document, monkeypatch):
+    def mock_preprocess(*args, **kwargs):
+        return ["this part was patched", "this part was also patched"]
+
+    monkeypatch.setattr("centrality_metrics.text2graph.preprocess",
+                        mock_preprocess)
+    document.preprocess_text()
+    assert document.text == "this part was patched. this part was also " \
+                            "patched."
 
 
 
