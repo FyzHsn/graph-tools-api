@@ -1,7 +1,13 @@
 import pytest
 
 from centrality_metrics.text2graph import Text2Graph
-from centrality_metrics.tests.data import TEST_DOC
+
+
+TEST_DOC = ["I like peaches.",
+            "Peaches taste good.",
+            "Ontario is known for its peaches.",
+            "Blueberries like peaches are another fruit type.",
+            ]
 
 
 @pytest.fixture
@@ -45,3 +51,6 @@ def test_weighted_graph(document):
               ('rice.', 'i'): 1,
               ('water.', 'drink'): 1}
     assert graph == result
+
+
+# def test_transform(document):
