@@ -27,10 +27,11 @@ class Text2Graph:
         :type pos_filter: bool
         """
 
-        self.text = ". ".join(preprocess(self.text,
-                                         stop_filter=stop_filter,
-                                         pos_filter=pos_filter))
-        self.text += "."
+        preprocessed_sentence_list = preprocess(self.text,
+                                                stop_filter=stop_filter,
+                                                pos_filter=pos_filter)
+
+        self.text = ". ".join(preprocessed_sentence_list) + "."
 
     @staticmethod
     def weighted_graph(graph, text, window=2):

@@ -31,4 +31,17 @@ def test_preprocess(document, monkeypatch):
                             "patched."
 
 
-
+def test_weighted_graph(document):
+    text = "i eat rice. i drink water."
+    graph = document.weighted_graph({}, text, window=2)
+    result = {('drink', 'i'): 1,
+              ('drink', 'water.'): 1,
+              ('eat', 'i'): 1,
+              ('eat', 'rice.'): 1,
+              ('i', 'drink'): 1,
+              ('i', 'eat'): 1,
+              ('i', 'rice.'): 1,
+              ('rice.', 'eat'): 1,
+              ('rice.', 'i'): 1,
+              ('water.', 'drink'): 1}
+    assert graph == result
