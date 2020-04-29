@@ -3,14 +3,20 @@ import pytest
 from centrality_metrics.text2graph import Text2Graph
 
 
-DOC_1 = ["I like peaches.",
-         "Peaches taste good.",
-         "Ontario is known for its peaches.",
-         "Blueberries like peaches are another fruit type.",
-        ]
+DOC = "I eat rice. I drink water."
 
 TEXT_1 = "i eat rice"
 TEXT_2 = "i drink water"
+
+GRAPH_12 = {('eat', 'i'): 1,
+            ('eat', 'rice'): 1,
+            ('i', 'eat'): 1,
+            ('rice', 'eat'): 1,
+            ('drink', 'i'): 1,
+            ('i', 'drink'): 1,
+            ('drink', 'water'): 1,
+            ('water', 'drink'): 1,
+           }
 
 
 @pytest.fixture
@@ -21,7 +27,7 @@ def document():
     :rtype: Text2Graph
     """
 
-    doc_graph = Text2Graph(" ".join(DOC_1))
+    doc_graph = Text2Graph(DOC)
     return doc_graph
 
 
@@ -51,17 +57,7 @@ def test_weighted_graph_window_2(document):
     assert graph == result
 
     graph = document.weighted_graph(result, "i drink water", window=2)
-    result = {('eat', 'i'): 1,
-              ('eat', 'rice'): 1,
-              ('i', 'eat'): 1,
-              ('rice', 'eat'): 1,
-              ('drink', 'i'): 1,
-              ('i', 'drink'): 1,
-              ('drink', 'water'): 1,
-              ('water', 'drink'): 1,
-             }
-
-    assert graph == result
+    assert graph == GRAPH_12
 
 
 def test_weighted_graph_window_3(document):
@@ -77,4 +73,10 @@ def test_weighted_graph_window_3(document):
     assert graph == result
 
 
-# def test_transform(document):
+def test_transform(document):
+    document.text = "i eat rice. i drink water."
+    assert document.graph == {} 
+   
+    document.transform(window=2)
+    assert document.graph == GRAPH_12
+              
