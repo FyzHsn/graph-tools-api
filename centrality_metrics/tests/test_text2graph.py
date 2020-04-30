@@ -15,8 +15,7 @@ GRAPH_12 = {('eat', 'i'): 1,
             ('drink', 'i'): 1,
             ('i', 'drink'): 1,
             ('drink', 'water'): 1,
-            ('water', 'drink'): 1,
-           }
+            ('water', 'drink'): 1}
 
 
 @pytest.fixture
@@ -48,12 +47,10 @@ def test_preprocess(document, monkeypatch):
 
 def test_weighted_graph_window_2(document):
     graph = document.weighted_graph({}, "i eat rice", window=2)
-
     result = {('eat', 'i'): 1,
               ('eat', 'rice'): 1,
               ('i', 'eat'): 1,
-              ('rice', 'eat'): 1,
-             }
+              ('rice', 'eat'): 1}
     assert graph == result
 
     graph = document.weighted_graph(result, "i drink water", window=2)
@@ -62,21 +59,34 @@ def test_weighted_graph_window_2(document):
 
 def test_weighted_graph_window_3(document):
     graph = document.weighted_graph({}, "i eat rice", window=3)
-
     result = {('eat', 'i'): 1,
               ('eat', 'rice'): 1,
               ('i', 'eat'): 1,
               ('rice', 'eat'): 1,
               ('i', 'rice'): 1,
-              ('rice', 'i'): 1
-             }
+              ('rice', 'i'): 1}
     assert graph == result
 
 
 def test_transform(document):
     document.text = "i eat rice. i drink water."
-    assert document.graph == {} 
-   
+    assert document.graph == {}
+
     document.transform(window=2)
     assert document.graph == GRAPH_12
-              
+
+
+def test_degree_centrality(document):
+    document.graph = GRAPH_12
+    assert document.degree_centrality() == \
+           [('eat', 2), ('i', 2), ('drink', 2), ('rice', 1), ('water', 1)]
+
+
+def test_normalized_degree_centrality(document, monkeypatch):
+    def mock_degree_centrality(*args, **kwargs):
+        return [('apple', 1), ('orange', 1), ('fruits', 1)]
+
+    monkeypatch.setattr(Text2Graph, "degree_centrality",
+                        mock_degree_centrality())
+    assert document.normalized_degree_centrality() == \
+           [('apple', 0.50), ('orange', 0.50), ('fruits', 0.50)]
