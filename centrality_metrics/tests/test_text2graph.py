@@ -1,6 +1,6 @@
 import pytest
 
-from centrality_metrics.text2graph import Text2Graph
+from centrality_metrics.text2graph import InvalidWindowLength, Text2Graph
 
 
 DOC = "I eat rice. I drink water."
@@ -68,6 +68,11 @@ def test_weighted_graph_window_3(document):
     assert graph == result
 
 
+def test_transform_invalid_window_length(document):
+    with pytest.raises(InvalidWindowLength):
+        document.transform(window=1)
+
+
 def test_transform(document):
     document.text = "i eat rice. i drink water."
     assert document.graph == {}
@@ -87,6 +92,6 @@ def test_normalized_degree_centrality(document, monkeypatch):
         return [('apple', 1), ('orange', 1), ('fruits', 1)]
 
     monkeypatch.setattr(Text2Graph, "degree_centrality",
-                        mock_degree_centrality())
+                        mock_degree_centrality)
     assert document.normalized_degree_centrality() == \
            [('apple', 0.50), ('orange', 0.50), ('fruits', 0.50)]

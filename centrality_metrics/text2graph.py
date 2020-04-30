@@ -4,6 +4,10 @@ import re
 from centrality_metrics.utils import preprocess
 
 
+class InvalidWindowLength(Exception):
+    pass
+
+
 class Text2Graph:
     def __init__(self, text):
         """Initialize graph representation of text
@@ -30,7 +34,6 @@ class Text2Graph:
         preprocessed_sentence_list = preprocess(self.text,
                                                 stop_filter=stop_filter,
                                                 pos_filter=pos_filter)
-
         self.text = ". ".join(preprocessed_sentence_list) + "."
 
     @staticmethod
@@ -80,6 +83,9 @@ class Text2Graph:
         other nodes are considered to be co-occurring.
         :type window: int
         """
+
+        if window < 2:
+            raise InvalidWindowLength("Window length should be greater than or equal to 2")
 
         for sentence in re.split("[?.]", self.text):
             self.graph = self.weighted_graph(self.graph, sentence, window)
