@@ -25,7 +25,7 @@ def api_centrality_score():
         return "Error: No id field provided"
 
     doc = Text2Graph(document)
-    doc.preprocess(stop_filter=False, pos_filter=False)
+    doc.preprocess_text(stop_filter=False, pos_filter=False)
     doc.transform(window=2)
     results = doc.normalized_degree_centrality()
 
