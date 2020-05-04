@@ -7,8 +7,8 @@ COPY . /app
 WORKDIR /app
 
 # Install requirements
-RUN pip install --no-cache -r requirements.txt
+RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python"]
+ENTRYPOINT [ "python" ]
 
-CMD ["app.py"]
+CMD [ "app.py" ]
