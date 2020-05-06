@@ -88,10 +88,12 @@ def test_degree_centrality(document):
 
 
 def test_normalized_degree_centrality(document, monkeypatch):
-    def mock_degree_centrality(*args, **kwargs):
-        return [('apple', 1), ('orange', 1), ('fruits', 1)]
-
     monkeypatch.setattr(Text2Graph, "degree_centrality",
-                        mock_degree_centrality)
+                        lambda *args, **kwargs:
+                        [('apple', 1), ('orange', 1), ('fruits', 1.0)])
     assert document.normalized_degree_centrality() == \
            [('apple', 0.50), ('orange', 0.50), ('fruits', 0.50)]
+
+    monkeypatch.setattr(Text2Graph, "degree_centrality",
+                        lambda *args, **kwargs: [('a', 1.0)])
+    assert document.normalized_degree_centrality() == [('a', 1.0)]
