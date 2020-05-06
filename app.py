@@ -1,6 +1,11 @@
 import flask
+import json
 
-from flask import request, jsonify
+from flask import (jsonify,
+                   make_response,
+                   request)
+from jsonschema import (validate,
+                        ValidationError)
 
 from centrality_metrics.text2graph import Text2Graph
 
@@ -19,17 +24,36 @@ def home():
 
 @app.route('/api/v1/centrality', methods=['GET'])
 def api_centrality_score():
-    if 'text' in request.args:
-        document = request.args['text']
-    else:
-        return "Error: No id field provided"
+    schema = {
+        "type": "object",
+        "properties": {
+            "text": {
+                "type": "string"
+            }
+        },
+        "required": ["text"]
+    }
+    headers = {"Content-Type": "application/json"}
+    input_params = {key: value for key, value in request.args.items()}
 
-    doc = Text2Graph(document)
+    try:
+        validate(input_params, schema)
+    except ValidationError as e:
+        val_error = json.dumps(
+            {
+                'error': '{}. Expected {}'.format(
+                    e.message, schema['required']
+                )
+            },
+            indent=4, sort_keys=True
+        )
+        return make_response(val_error, 400, headers)
+
+    doc = Text2Graph(request.args["text"])
     doc.preprocess_text(stop_filter=False, pos_filter=False)
     doc.transform(window=2)
     results = doc.normalized_degree_centrality()
-
-    return jsonify(results)
+    return make_response(jsonify(results), 200, headers)
 
 
 if __name__ == "__main__":

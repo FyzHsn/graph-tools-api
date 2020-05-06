@@ -85,7 +85,8 @@ class Text2Graph:
         """
 
         if window < 2:
-            raise InvalidWindowLength("Window length should be greater than or equal to 2")
+            raise InvalidWindowLength("Window length should be greater than "
+                                      "or equal to 2")
 
         for sentence in re.split("[?.]", self.text):
             self.graph = self.weighted_graph(self.graph, sentence, window)
@@ -124,4 +125,7 @@ class Text2Graph:
 
         node_score = self.degree_centrality()
         node_num = len(node_score) - 1
+        if node_num == 0:
+            return [(n, 1.0) for (n, s) in node_score]
+
         return [(n, np.round(s / node_num, 2)) for (n, s) in node_score]
