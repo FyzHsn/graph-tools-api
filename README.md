@@ -21,7 +21,7 @@ In order to run this toy API follow the steps outlined below.
 
 
 # Code Example
-`http://0.0.0.0:5000/api/v1/centrality?text=""Physics is the natural science that studies matter, its motion and behavior through space and time, and the related entities of energy and force. Newton's laws connect force, space and time and motion."` 
+`http://0.0.0.0:5000/api/v1/centrality?text=Physics is the natural science that studies matter, its motion and behavior through space and time, and the related entities of energy and force. Newton's laws connect force, space and time and motion.` 
  
 The request above will lead return the following json object:
 ```buildoutcfg

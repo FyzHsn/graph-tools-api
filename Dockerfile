@@ -8,6 +8,8 @@ WORKDIR /app
 
 # Install requirements
 RUN pip install -r requirements.txt
+RUN python -m nltk.downloader averaged_perceptron_tagger
+RUN pytest
 
 ENTRYPOINT [ "python" ]
 
