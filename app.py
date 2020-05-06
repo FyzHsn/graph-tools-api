@@ -39,18 +39,26 @@ def api_centrality_score():
     try:
         validate(input_params, schema)
     except ValidationError as e:
-        val_error = json.dumps(
+        validation_error = json.dumps(
             {
-                'error': '{}. Expected {}'.format(
-                    e.message, schema['required']
-                )
+                f'error': '{e.message}. Expected {schema["required"]}'
             },
             indent=4, sort_keys=True
         )
-        return make_response(val_error, 400, headers)
+        return make_response(validation_error, 400, headers)
 
-    doc = Text2Graph(request.args["text"])
-    doc.preprocess_text(stop_filter=False, pos_filter=False)
+    req = request.args["text"]
+    if req == "":
+        value_error = json.dumps(
+            {
+                "error": "value error. Expected non empty string"
+            },
+            indent=4, sort_keys=True
+        )
+        return make_response(value_error, 400, headers)
+
+    doc = Text2Graph(req)
+    doc.preprocess_text(stop_filter=True, pos_filter=True)
     doc.transform(window=2)
     results = doc.normalized_degree_centrality()
     return make_response(jsonify(results), 200, headers)
