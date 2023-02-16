@@ -20,5 +20,5 @@ regex==2020.4.4
 six==1.14.0
 tqdm==4.45.0
 wcwidth==0.1.9
-Werkzeug==1.0.1
+Werkzeug==2.2.3
 zipp==3.1.0
